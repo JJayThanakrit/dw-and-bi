@@ -78,6 +78,17 @@ def process(cur, conn, filepath):
                 # print(insert_statement)
                 cur.execute(insert_statement)
 
+                 # Insert data into tables here
+                insert_statement = f"""
+                    INSERT INTO repos (
+                        repo_id,
+                        name
+                    ) VALUES ('{each["repo"]["id"]}', '{each["repo"]["name"]}')
+                    ON CONFLICT (repo_id) DO NOTHING
+                """
+                # print(insert_statement)
+                cur.execute(insert_statement)
+
                 conn.commit()
 
 
