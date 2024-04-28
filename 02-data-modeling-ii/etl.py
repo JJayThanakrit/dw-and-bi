@@ -12,13 +12,14 @@ table_create = """
     CREATE TABLE IF NOT EXISTS events
     (
         id text,
+        login_name text,
         type text,
+        organize text,
+        create_date timestamp,
         public boolean,
-        PRIMARY KEY (
-            id,
-            type
-        )
+        PRIMARY KEY ((id, type), create_date)
     )
+    WITH CLUSTERING ORDER BY (create_date DESC)
 """
 
 create_table_queries = [
@@ -37,7 +38,7 @@ def drop_tables(session):
 
 
 def create_tables(session):
-    for query in create_table_queries:
+    for query in create_table_queries :
         try:
             session.execute(query)
         except Exception as e:
@@ -70,16 +71,43 @@ def process(session, filepath):
             data = json.loads(f.read())
             for each in data:
                 # Print some sample data
-                print(each["id"], each["type"], each["actor"]["login"])
+                print(each["id"], each["type"], each["actor"]["login"], each["created_at"], each["public"])
 
                 # Insert data into tables here
+                if "org" in each:
+                    insert_statement = f"""
+                        INSERT INTO events (
+                            id,
+                            login_name,
+                            type,
+                            organize,
+                            create_date,
+                            public
+                        ) VALUES ('{each["id"]}', '{each["actor"]["login"]}', '{each["type"]}', '{each["org"]["id"]}','{each["created_at"]}', {each["public"]})
+                    """
+                    # print(insert_statement)
+                    session.execute(insert_statement)
+            
+                else:
+                    insert_statement = f"""
+                        INSERT INTO events (
+                            id,
+                            login_name,
+                            type,
+                            organize,
+                            create_date,
+                            public
+                        ) VALUES ('{each["id"]}', '{each["actor"]["login"]}', '{each["type"]}', 'personal','{each["created_at"]}', {each["public"]})
+                    """
+                    # print(insert_statement)
+                    session.execute(insert_statement)
 
 
-def insert_sample_data(session):
-    query = f"""
-    INSERT INTO events (id, type, public) VALUES ('23487929637', 'IssueCommentEvent', true)
-    """
-    session.execute(query)
+# def insert_sample_data(session):
+#     query = f"""
+#     INSERT INTO events (id, type, public) VALUES ('23487929637', 'IssueCommentEvent', true)
+#     """
+#     session.execute(query)
 
 
 def main():
@@ -106,13 +134,15 @@ def main():
     drop_tables(session)
     create_tables(session)
 
-    # process(session, filepath="../data")
-    insert_sample_data(session)
+    process(session, filepath="../data")
+    #insert_sample_data(session)
 
     # Select data in Cassandra and print them to stdout
     query = """
-    SELECT * from events WHERE id = '23487929637' AND type = 'IssueCommentEvent'
+        SELECT * FROM events where type = 'CreateEvent' ALLOW FILTERING
     """
+
+    rows = []
     try:
         rows = session.execute(query)
     except Exception as e:
