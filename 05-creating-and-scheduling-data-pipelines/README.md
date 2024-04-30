@@ -1,20 +1,10 @@
-# Creating and Scheduling Data Pipelines
+# Project05 : Creating and Scheduling data pipelines
+## What is this?
+ This is a automate data pipeline to do process data from dataset by using Airflow. 
 
-ถ้าใช้งานระบบที่เป็น Linux ให้เรารันคำสั่งด้านล่างนี้ก่อน
-
-```sh
-mkdir -p ./dags ./logs ./plugins
-echo -e "AIRFLOW_UID=$(id -u)" > .env
-```
-
-หลังจากนั้นให้รัน
-
-```sh
-docker-compose up
-```
-
-เราจะสามารถเข้าไปที่หน้า Airflow UI ได้ที่ port 8080
-
-เสร็จแล้วให้คัดลอกโฟลเดอร์ `data` ที่เตรียมไว้ข้างนอกสุด เข้ามาใส่ในโฟลเดอร์ `dags` เพื่อที่ Airflow จะได้เห็นไฟล์ข้อมูลเหล่านี้ แล้วจึงค่อยทำโปรเจคต่อ
-
-**หมายเหตุ:** จริง ๆ แล้วเราสามารถเอาโฟลเดอร์ `data` ไว้ที่ไหนก็ได้ที่ Airflow ที่เรารันเข้าถึงได้ แต่เพื่อความง่ายสำหรับโปรเจคนี้ เราจะนำเอาโฟลเดอร์ `data` ไว้ในโฟลเดอร์ `dags` เลย
+## How to run this code?
+1. Go to 5-creating-and-scheduling-data-pipelines.
+2. Run command "docker compose up" to do install Airflow.
+3. Go to port and open port 8080 to do open Airflow Application.
+4. Go to Dag Floder, Is in DAG if you want to chang schedule or process collect data, You can edit in etl.py.
+5. When finished, You can see job in Airflow Application.
