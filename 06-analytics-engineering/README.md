@@ -1,16 +1,13 @@
 # Project06 : Analytics Engineering
-
 ## What is this?
- This is a data of git action in the Cloud Data Warehouse. This Data have 3 table is actors, events and repositarys.   
-
-## How to use this data?
- This data can be used to analyze github user usage data, such as Analyze user usage in various areas.
+ This is a DBT to do use to Analytics Engineering, In this lab we will collect data frin CSV file and make to data mart to do use in business follow by Business Rule.
 
 ## How to run this code?
 1. Go to 06-analytics-engineering.
-2. Run command "pip install -r requirements.txt" to do install with requirement.
-3. Change datails in line 40 and 46 for keyfile and project_id is your file of key of your Google BigQuery.
-4. Run etl file follows step
-4.1. Run command "python etl_bigquery.py" 
-4.2. Run command "python etl_bigquery_act.py" 
-4.3. Run command "python etl_bigquery_rep.py" 
+2. Run command "docker compose up" to do install PostgreSQL.
+3. Run command "pip install dbt-core dbt-postgres" to do install DBT for PostgreSQL.
+4. Run command "code /home/codespace/.dbt/profiles.yml" to do create Project
+5. Run command "cd greenery" to do go to greenery floder.
+6. Run command "dbt seed" to do keep the seed folder to be run code to import from CSV File.
+7. Run command "dbt run" to do create DBT model
+8. Run command "dbt test" to do test DBT Model
